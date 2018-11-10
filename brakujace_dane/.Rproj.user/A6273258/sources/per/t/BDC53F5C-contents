@@ -1,0 +1,21 @@
+---
+title: "Test"
+author: "Paweł Lonca"
+date: "6 November 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+a <- 1
+b <- 2
+```
+
+Pojawia się nowa zmienna:
+```{r}
+c <- 3
+```
+

@@ -1,0 +1,2 @@
+"0","szerokosci <- as.double(xml_attr(stacje, ""lat""))"
+"0","dlugosci <- as.double(xml_attr(stacje, ""lng""))"

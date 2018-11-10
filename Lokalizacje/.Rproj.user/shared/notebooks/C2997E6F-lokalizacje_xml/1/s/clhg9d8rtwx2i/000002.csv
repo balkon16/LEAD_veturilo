@@ -1,0 +1,2 @@
+"0","library(xml2)"
+"0","y <- read_xml('http://nextbike.net/maps/nextbike-official.xml?city=210&fbclid=IwAR2CWCoe-qO__oFX8y5WwFAqz0TYhd8GGizbDSiFb3rc_6vdVFGBue0yuXc')"

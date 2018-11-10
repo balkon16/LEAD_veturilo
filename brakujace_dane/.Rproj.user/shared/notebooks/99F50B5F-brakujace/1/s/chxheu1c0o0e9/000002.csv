@@ -1,0 +1,2 @@
+"0","brakujace_dni_wyp <- map(wypozyczenia_lista, function(x){apply(x, 2, FUN=function(y){sum(is.na(y))})})"
+"0","brakujace_dni_zwr <- map(zwroty_lista, function(x){apply(x, 2, FUN=function(y){sum(is.na(y))})})"

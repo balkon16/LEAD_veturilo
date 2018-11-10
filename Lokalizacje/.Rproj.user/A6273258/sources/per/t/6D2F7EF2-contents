@@ -1,0 +1,89 @@
+---
+title: "lokalizacje_z_xml"
+author: "Paweł Lonca"
+date: "5 November 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Wczytuję plik XML:
+```{r}
+library(xml2)
+y <- read_xml('http://nextbike.net/maps/nextbike-official.xml?city=210&fbclid=IwAR2CWCoe-qO__oFX8y5WwFAqz0TYhd8GGizbDSiFb3rc_6vdVFGBue0yuXc')
+```
+
+### GPS
+
+Wyszukuję wszystkie stacje (są oznaczone przez `<place>`):
+```{r}
+stacje <- xml_find_all(y, ".//place")
+```
+
+Nazwa stacji jest w atrybucie `name`:
+```{r}
+nazwy_stacji <- xml_attr(stacje, "name")
+```
+
+```{r}
+szerokosci <- as.double(xml_attr(stacje, "lat"))
+dlugosci <- as.double(xml_attr(stacje, "lng"))
+```
+
+Ta ramka będzie stała w czasie:
+```{r}
+stacje_gps <- data.frame(nazwa = nazwy_stacji, lat=szerokosci, lng=dlugosci, stringsAsFactors = FALSE)
+head(stacje_gps)
+```
+
+### Liczba rowerów
+
+Ta ramka będzie się zmieniać w czasie. 
+```{r}
+stacje_rowery <- data_frame(nazwa = nazwy_stacji,
+                             miejsca = as.integer(xml_attr(stacje, "bike_racks")),
+                             wolne = as.integer(xml_attr(stacje, "free_racks")),
+                             zajete = as.integer(xml_attr(stacje, "bikes")),
+                            rowery = xml_attr(stacje, "bike_numbers")) 
+head(stacje_rowery)
+```
+
+### Lista rowerów
+
+Czy są w systemie rowery, które mają status nie "ok"?
+
+```{r}
+z <- xml_find_all(y, ".//bike")
+rowery <- data.frame(numer = xml_attr(z, "number"),
+                     typ = as.factor(xml_attr(z, "bike_type")),
+                     aktywny = as.factor(xml_attr(z, "active")),
+                     status = xml_attr(z, "state"))
+dim(rowery)
+```
+
+Wszystkie rowery w systemie (na tą chwilę) mają status ok:
+```{r}
+rowery$status[rowery$status=="ok"] %>% length()
+```
+
+Wszystkie są aktywne:
+```{r}
+rowery$aktywny[rowery$aktywny==1] %>% length()
+```
+
+
+### Gdzie jest rower?
+
+Chcę znaleźć rower o zadanym numerze: 
+
+```{r}
+numer <- "29135"
+```
+
+Jest na stacji:
+```{r}
+stacje_rowery[which(grepl(numer,stacje_rowery$rowery)),]$nazwa
+```
+

@@ -1,0 +1,79 @@
+---
+title: "brakujace dane"
+author: "Paweł Lonca"
+date: "6 November 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+library(tidyverse)
+```
+
+```{r}
+plik_excel <- read_xlsx("./dane/data_missing.xlsx")
+```
+
+```{r}
+for(sheet in excel_sheets("./dane/data_missing.xlsx")){
+  if(sheet=="Sezon 2017") next
+  assign(paste0(sheet, "_wypozyczenia"), read_xlsx("./dane/data_missing.xlsx", sheet = sheet, range = cell_cols("A:AH")))
+  assign(paste0(sheet, "_zwroty"), read_xlsx("./dane/data_missing.xlsx", sheet = sheet, range = cell_cols("AI:BP")))
+}
+```
+
+```{r}
+wypozyczenia_lista <- list()
+zwroty_lista <- list()
+kartki <- excel_sheets("./dane/data_missing.xlsx")
+miesiace <- c("styczen", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpien", "wrzesien", "pazdziernik", "listopad")
+for(i in 1:length(kartki)){
+  if(kartki[i]=="Sezon 2017") next
+  
+  nazwa <- ifelse(i+1<10, paste0("0",i+1), i+1)
+  
+  wypozycz <- assign(paste0(nazwa, "_wypozyczenia"), read_xlsx("./dane/data_missing.xlsx", sheet = kartki[i], range = cell_cols("A:AH")))
+  wypozycz <- wypozycz[, colSums(is.na(wypozycz)) != nrow(wypozycz)] #usuwa kolumny z samymi NA
+  colnames(wypozycz) <- wypozycz[1,] #pierwszy wiersz jako nazwy kolumn
+  wypozycz <- wypozycz[-c(1,2),]  #pierwszy wiersz staje się zbędny; drugi wiersz to sumarycznie (nie interesuje nas)
+  colnames(wypozycz) <- as.Date(as.integer(colnames(wypozycz)), origin="1899-12-30") #nazwy kolumn na datę typu yyyy-mm-dd
+  wypozycz <- wypozycz[,-2] #usuwam drugą kolumnę (nie pamiętam czemu)
+  colnames(wypozycz)[1] <- "nazwa_stacji" #po zmianie daty nazwa kolumny to NA, więc nadaję nową nazwę
+  wypozyczenia_lista[[miesiace[i+1]]] <- wypozycz #dołączam do listy pod nazwą miesiąca, którego ramka dotyczy
+  
+  
+  zwrot <- assign(paste0(nazwa, "_zwroty"), read_xlsx("./dane/data_missing.xlsx", sheet = kartki[i], range = cell_cols("AI:BP")))
+  zwrot <- zwrot[, colSums(is.na(zwrot)) != nrow(zwrot)]
+  colnames(zwrot) <- zwrot[1,]
+  zwrot <- zwrot[-c(1,2),]
+  colnames(zwrot) <- as.Date(as.integer(colnames(zwrot)), origin="1899-12-30")
+  zwrot <- zwrot[,-2]
+  colnames(zwrot)[1] <- "nazwa_stacji"
+  
+  zwroty_lista[[miesiace[i+1]]] <- zwrot
+
+}
+```
+
+Dla każdego z dostępnych miesięcy sprawdzam brakujące dane. Najpierw sprawdzam, w których dniach brakowało.
+```{r}
+brakujace_dni_wyp <- map(wypozyczenia_lista, function(x){apply(x, 2, FUN=function(y){sum(is.na(y))})})
+brakujace_dni_zwr <- map(zwroty_lista, function(x){apply(x, 2, FUN=function(y){sum(is.na(y))})})
+```
+
+
+```{r}
+
+```
+
+
+
+
+
+
+
+

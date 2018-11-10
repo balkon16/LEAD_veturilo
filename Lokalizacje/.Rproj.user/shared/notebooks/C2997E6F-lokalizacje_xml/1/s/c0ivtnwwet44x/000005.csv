@@ -1,0 +1,2 @@
+"0","stacje_gps <- data.frame(nazwa = nazwy_stacji, lat=szerokosci, lng=dlugosci, stringsAsFactors = FALSE)"
+"0","head(stacje_gps)"

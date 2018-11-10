@@ -1,0 +1,6 @@
+"0","stacje_rowery[which(grepl(numer,stacje_rowery$rowery)),]$nazwa
+"
+"1","[1]"
+"1"," ""Metro Stare Bielany"""
+"1","
+"

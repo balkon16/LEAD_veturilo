@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1541527659817.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3172758320",
+    "id" : "BDC53F5C",
+    "lastKnownWriteTime" : 1541527963,
+    "last_content_update" : 1541527978886,
+    "path" : "~/Downloads/testowe_Rmarkdown/test_Rmarkdonw.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "21,0",
+        "last_setup_crc32" : "D46929D3bb338d19",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
