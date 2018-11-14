@@ -9,6 +9,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(tidyverse)
+```
+
+
 Wczytuję plik XML:
 ```{r}
 library(xml2)
@@ -79,11 +84,20 @@ rowery$aktywny[rowery$aktywny==1] %>% length()
 Chcę znaleźć rower o zadanym numerze: 
 
 ```{r}
-numer <- "29135"
+numer <- "28521"
 ```
 
 Jest na stacji:
 ```{r}
 stacje_rowery[which(grepl(numer,stacje_rowery$rowery)),]$nazwa
+```
+
+### Eksport do Excel
+
+Eksport ramki danych z lokalizacjami `stacje_gps` do formatu odpowiedniego dla PowerBI:
+
+```{r}
+library(openxlsx)
+write.xlsx(stacje_gps, "./pliki_excel/lokalizacje_stacji.xlsx")
 ```
 
