@@ -18,19 +18,21 @@ library(tidyverse)
 plik_excel <- read_xlsx("./dane/data_missing.xlsx")
 ```
 
-```{r}
-for(sheet in excel_sheets("./dane/data_missing.xlsx")){
+```{r results='hide'}
+suppressWarnings(for(sheet in excel_sheets("./dane/data_missing.xlsx")){
   if(sheet=="Sezon 2017") next
   assign(paste0(sheet, "_wypozyczenia"), read_xlsx("./dane/data_missing.xlsx", sheet = sheet, range = cell_cols("A:AH")))
   assign(paste0(sheet, "_zwroty"), read_xlsx("./dane/data_missing.xlsx", sheet = sheet, range = cell_cols("AI:BP")))
-}
+})
 ```
 
 ```{r}
+
 wypozyczenia_lista <- list()
 zwroty_lista <- list()
 kartki <- excel_sheets("./dane/data_missing.xlsx")
 miesiace <- c("styczen", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpien", "wrzesien", "pazdziernik", "listopad")
+suppressWarnings(
 for(i in 1:length(kartki)){
   if(kartki[i]=="Sezon 2017") next
   
@@ -57,6 +59,7 @@ for(i in 1:length(kartki)){
   zwroty_lista[[miesiace[i+1]]] <- zwrot
 
 }
+)
 ```
 
 Dla każdego z dostępnych miesięcy sprawdzam brakujące dane. Najpierw sprawdzam, w których dniach brakowało.
